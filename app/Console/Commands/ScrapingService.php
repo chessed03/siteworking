@@ -83,7 +83,16 @@ class ScrapingService extends Command
 
                 Mail::to( $mailersToSend )->send( new ScrapingMail( $contentMail ) );
 
+            } else {
+
+                foreach ( $sites as $key => $site ) {
+
+                    Site::sitesProccesSuccess([$site->idSite]);
+
+                }
+
             }
+
 
         }
 

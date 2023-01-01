@@ -40,13 +40,9 @@ class Emails extends Component
 
     public function messageAlert( $heading, $text, $icon )
     {
-        $alertMessage = (object)[
-            'heading' => $heading,
-            'text'    => $text,
-            'icon'    => $icon
-        ];
 
-        return json_encode( $alertMessage );
+        $this->emit('message', $heading, $text, $icon);
+
     }
 
     public function hydrate()
@@ -121,17 +117,16 @@ class Emails extends Component
                 'emailCreatedBy' => 'user-root'
             ]);
 
-            $messageAlert = $this->messageAlert('Éxito!', 'Email creado.','success');
+            $this->messageAlert('Éxito!', 'Email creado.','success');
 
         } else {
 
-            $messageAlert = $this->messageAlert('Error!', 'Ya existe un usuario con el nombre ingresado.','error');
+            $this->messageAlert('Error!', 'Ya existe un usuario con el nombre ingresado.','error');
 
         }
 
         $this->resetInput();
         $this->emit('closeCreateModal');
-        session()->flash('message', $messageAlert);
         $this->hydrate();
     }
 
@@ -176,18 +171,17 @@ class Emails extends Component
                     'emailAddress' => implode('',array_filter(explode(' ',$this->emailAddress))),
                 ]);
 
-                $messageAlert = $this->messageAlert('Éxito!', 'Email actualizado.','success');
+                $this->messageAlert('Éxito!', 'Email actualizado.','success');
 
             } else {
 
-                $messageAlert = $this->messageAlert('Error!', 'Ya existe un usuario con el nombre ingresado.','error');
+                $this->messageAlert('Error!', 'Ya existe un usuario con el nombre ingresado.','error');
 
             }
 
             $this->resetInput();
             $this->emit('closeUpdateModal');
             $this->updateMode = false;
-            session()->flash('message', $messageAlert);
             $this->hydrate();
         }
     }
@@ -195,13 +189,12 @@ class Emails extends Component
     public function destroy($id)
     {
         if ($id) {
+
             $record = Email::where('idEmail', $id)->first();
             $record->emailStatus = 0;
             $record->update();
+            $this->messageAlert('Éxito!', 'Email eliminado.','success');
 
-            $messageAlert = $this->messageAlert('Éxito!', 'Email eliminado.','success');
-
-            session()->flash('message', $messageAlert);
         }
     }
 }

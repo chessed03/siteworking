@@ -463,6 +463,25 @@
         $('#updateModal').modal('hide');
     });
 
+    window.livewire.on('message', (heading, text, icon) => {
+
+        setTimeout(
+            function()
+            {
+
+                $.toast({
+                    heading: heading,
+                    text: text,
+                    icon: icon,
+                    loader: true,
+                    showHideTransition: 'fade',
+                    position: 'top-right'
+                });
+
+            }, 250);
+
+    });
+
 </script>
 
 

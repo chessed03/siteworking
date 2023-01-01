@@ -108,12 +108,22 @@
 
                                 <td class="text-right">
 
-                                    <a class="text-primary" href="#" data-toggle="modal" data-target="#updateModal" wire:click="edit({{ $row->idEmail }})">
-                                        <i class="bx bxs-pencil bx-border-circle border-primary bx-xs ml-1"></i>
-                                    </a>
-                                    <a class="text-danger" href="#" onclick="destroy('{{ $row->idEmail }}')">
-                                        <i class="bx bxs-trash-alt bx-border-circle border-danger bx-xs ml-1"></i>
-                                    </a>
+                                    <div class="btn-group dropdown mb-2">
+                                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-rounded waves-effect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-fw bxs-chevron-down"></i> Opciones
+                                        </button>
+                                        <div class="dropdown-menu">
+
+                                            <a class="dropdown-item text-primary" href="#" data-toggle="modal" data-target="#updateModal" wire:click="edit({{ $row->idEmail }})">
+                                                <i class="bx bx-fw bxs-pencil"></i> Editar
+                                            </a>
+
+                                            <a class="dropdown-item text-danger" href="#" onclick="destroy('{{ $row->idEmail }}')">
+                                                <i class="bx bx-fw bxs-trash-alt"></i> Eliminar
+                                            </a>
+
+                                        </div>
+                                    </div><!-- /btn-group -->
 
                                 </td>
                             </tr>

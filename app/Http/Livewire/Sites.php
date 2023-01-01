@@ -18,6 +18,7 @@ class Sites extends Component
     public $updateMode         = false;
     public $selected_id, $keyWord, $siteName, $siteUrl;
 
+
     public function render()
     {
         $siteStatus = new ResolveStatus;
@@ -44,13 +45,9 @@ class Sites extends Component
 
     public function messageAlert( $heading, $text, $icon )
     {
-        $alertMessage = (object)[
-            'heading' => $heading,
-            'text'    => $text,
-            'icon'    => $icon
-        ];
 
-        return json_encode( $alertMessage );
+        $this->emit('message', $heading, $text, $icon);
+
     }
 
     public function hydrate()
@@ -89,18 +86,18 @@ class Sites extends Component
                 'siteCreatedBy' => 'user-root'
             ]);
 
-            $messageAlert = $this->messageAlert('Éxito!', 'Sitio creado.','success');
+            $this->messageAlert('Éxito!', 'Sitio creado.','success');
 
         } else {
 
-            $messageAlert = $this->messageAlert('Error!', 'Ya existe un sitio con el nombre ingresado.','error');
+            $this->messageAlert('Error!', 'Ya existe un sitio con el nombre ingresado.','error');
 
         }
 
         $this->resetInput();
         $this->emit('closeCreateModal');
-        session()->flash('message', $messageAlert);
         $this->hydrate();
+
     }
 
     public function edit($id)
@@ -136,19 +133,19 @@ class Sites extends Component
                     'siteUrl' => $this->siteUrl
                 ]);
 
-                $messageAlert = $this->messageAlert('Éxito!', 'Sitio actualizado.','success');
+                $this->messageAlert('Éxito!', 'Sitio actualizado.','success');
 
             } else {
 
-                $messageAlert = $this->messageAlert('Error!', 'Ya existe un sitio con el nombre ingresado.','error');
+                $this->messageAlert('Error!', 'Ya existe un sitio con el nombre ingresado.','error');
 
             }
 
             $this->resetInput();
             $this->emit('closeUpdateModal');
             $this->updateMode = false;
-            session()->flash('message', $messageAlert);
             $this->hydrate();
+
         }
     }
 
@@ -159,9 +156,33 @@ class Sites extends Component
             $record->siteStatus = 0;
             $record->update();
 
-            $messageAlert = $this->messageAlert('Éxito!', 'Sitio eliminado.','success');
-
-            session()->flash('message', $messageAlert);
+            $this->messageAlert('Éxito!', 'Sitio eliminado.','success');
         }
+    }
+
+    public function scrapingSingleVerification($id)
+    {
+        $this->updateMode = true;
+
+        $site = Site::where('idSite', $id)->first();
+
+        sleep(1);
+
+        $process = __consumeScraperService( $site->siteUrl );
+
+        if ( !empty( $process ) ) {
+
+            Site::sitesProcessFail( [$site->idSite] );
+
+        } else {
+
+            Site::sitesProccessSuccess( [$site->idSite] );
+
+        }
+
+        $this->updateMode = false;
+
+        $this->messageAlert('Éxito!', 'Proceso terminado.','success');
+
     }
 }

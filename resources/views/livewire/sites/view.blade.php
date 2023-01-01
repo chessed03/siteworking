@@ -27,17 +27,6 @@
                 <div class="row justify-content-between">
                     <h4 class="header-title mb-3">Lista de sitios</h4>
 
-                    @if ( session('message') )
-
-                        <div
-                            x-data="{ }"
-                            x-init="() => {
-                               messageAlert('{{ session('message') }}');
-                            }">
-                        </div>
-
-                    @endif
-
                     <button type="button" class="btn btn-success btn-rounded waves-effect" data-toggle="modal" data-target="#createModal"><i class="bx bx-fw bxs-plus-circle bx-xs"></i> Agregar sitio </button>
                 </div>
 
@@ -98,35 +87,55 @@
 
                         @foreach($sites as $row)
                             <tr>
-                                <td style="width: 36px;">
+                                <td style="width: 5%;">
                                     {{ ($sites ->currentpage()-1) * $sites ->perpage() + $loop->index + 1 }}
                                 </td>
 
-                                <td>
+                                <td style="width: 25%;">
                                     <h5 class="m-0 font-weight-normal">{{ $row->siteName }}</h5>
                                 </td>
 
-                                <td>
+                                <td style="width: 30%;">
                                     <h5 class="m-0 font-weight-normal">{{ $row->siteUrl }}</h5>
                                 </td>
 
-                                <td>
+                                <td style="width: 20%;">
 
-                                    <small class="badge badge-light-{{ $siteStatus->siteHealth( $row->siteHealth )->type }} font-14">
+                                    <span class="badge badge-light-{{ $siteStatus->siteHealth( $row->siteHealth )->type }} badge-pill font-14" wire:loading.remove wire:target="scrapingSingleVerification({{ $row->idSite  }})">
                                         <i class="{{ $siteStatus->siteHealth( $row->siteHealth )->icon }} text-{{ $siteStatus->siteHealth( $row->siteHealth )->type }}"></i>
                                         {{ $siteStatus->siteHealth( $row->siteHealth )->text }}
-                                    </small>
+                                    </span>
+
+                                    <div wire:loading wire:target="scrapingSingleVerification({{ $row->idSite  }})">
+                                        <span class="badge badge-light-secondary badge-pill font-14"><i class='bx bx-fw bx-radio-circle bx-burst'></i> Procesando</span>
+                                    </div>
 
                                 </td>
 
-                                <td class="text-right">
+                                <td class="text-right" style="width: 20%;">
 
-                                    <a class="text-primary" href="#" data-toggle="modal" data-target="#updateModal" wire:click="edit({{ $row->idSite }})">
-                                        <i class="bx bxs-pencil bx-border-circle border-primary bx-xs ml-1"></i>
-                                    </a>
-                                    <a class="text-danger" href="#" onclick="destroy('{{ $row->idSite }}')">
-                                        <i class="bx bxs-trash-alt bx-border-circle border-danger bx-xs ml-1"></i>
-                                    </a>
+                                    <div class="btn-group dropdown mb-2">
+                                        <button wire:target="scrapingSingleVerification({{ $row->idSite  }})" wire:loading.attr="disabled" type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-rounded waves-effect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-fw bxs-chevron-down"></i> Opciones
+                                        </button>
+                                        <div class="dropdown-menu">
+
+                                            <a class="dropdown-item text-success"
+                                               href="#"
+                                               wire:click="scrapingSingleVerification({{ $row->idSite  }})">
+                                                <i class="bx bx-fw bxs-cog"></i> Procesar URL
+                                            </a>
+
+                                            <a class="dropdown-item text-primary" href="#" data-toggle="modal" data-target="#updateModal" wire:click="edit({{ $row->idSite }})">
+                                                <i class="bx bx-fw bxs-pencil"></i> Editar
+                                            </a>
+
+                                            <a class="dropdown-item text-danger" href="#" onclick="destroy('{{ $row->idSite }}')">
+                                                <i class="bx bx-fw bxs-trash-alt"></i> Eliminar
+                                            </a>
+
+                                        </div>
+                                    </div><!-- /btn-group -->
 
                                 </td>
                             </tr>

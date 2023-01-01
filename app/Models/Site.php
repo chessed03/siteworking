@@ -125,7 +125,7 @@ class Site extends Model
 
         }
 
-        self::sitesProccesSuccess( $idSitesSuccess );
+        self::sitesProccessSuccess( $idSitesSuccess );
 
         self::sitesProcessFail( $idSitesFails );
 
@@ -133,7 +133,7 @@ class Site extends Model
 
     }
 
-    public function sitesProccesSuccess( $idSites )
+    public function sitesProccessSuccess( $idSites )
     {
 
         foreach ( $idSites as $key => $idSite ) {
