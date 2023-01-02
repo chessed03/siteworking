@@ -129,8 +129,9 @@ class Sites extends Component
                 $record = Site::find($this->selected_id);
 
                 $record->update([
-                    'siteName' => $this->siteName,
-                    'siteUrl' => $this->siteUrl
+                    'siteName'   => $this->siteName,
+                    'siteUrl'    => $this->siteUrl,
+                    'siteHealth' => 0
                 ]);
 
                 $this->messageAlert('Éxito!', 'Sitio actualizado.','success');

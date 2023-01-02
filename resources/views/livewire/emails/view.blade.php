@@ -87,7 +87,7 @@
                             <th>#</th>
                             <th>Usuario</th>
                             <th>Correo</th>
-                            <th class="text-right">&nbsp;</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -106,7 +106,7 @@
                                     <h5 class="m-0 font-weight-normal">{{ $row->emailAddress }}</h5>
                                 </td>
 
-                                <td class="text-right">
+                                <td class="text-center">
 
                                     <div class="btn-group dropdown mb-2">
                                         <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-rounded waves-effect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

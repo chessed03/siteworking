@@ -14,7 +14,7 @@ class Site extends Model
 
     protected $primaryKey = 'idSite';
 
-    protected $fillable   = ['siteName','siteUrl','siteStatus','siteCreatedBy'];
+    protected $fillable   = ['siteName','siteUrl','siteHealth','siteStatus','siteCreatedBy'];
 
     public function getDataForSitesView( $keyWord, $paginateNumber, $orderBy )
     {

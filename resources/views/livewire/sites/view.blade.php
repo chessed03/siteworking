@@ -80,7 +80,7 @@
                                 <th>Sitio</th>
                                 <th>Url</th>
                                 <th>Estado</th>
-                                <th class="text-right">&nbsp;</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,12 +107,12 @@
                                     </span>
 
                                     <div wire:loading wire:target="scrapingSingleVerification({{ $row->idSite  }})">
-                                        <span class="badge badge-light-secondary badge-pill font-14"><i class='bx bx-fw bx-radio-circle bx-burst'></i> Procesando</span>
+                                        <span class="badge badge-light-secondary badge-pill font-14"><i class='bx bx-fw bx-radio-circle bx-burst'></i> Procesando...</span>
                                     </div>
 
                                 </td>
 
-                                <td class="text-right" style="width: 20%;">
+                                <td class="text-center" style="width: 20%;">
 
                                     <div class="btn-group dropdown mb-2">
                                         <button wire:target="scrapingSingleVerification({{ $row->idSite  }})" wire:loading.attr="disabled" type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-rounded waves-effect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
