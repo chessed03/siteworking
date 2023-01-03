@@ -272,23 +272,23 @@
                             </li>
 
                             @auth()
-                                <li>
-                                    <a href="{{ route('sites-index')  }}">
-                                        Sitios
-                                    </a>
-                                </li>
 
                                 <li>
                                     <a href="{{ route('emails-index')  }}">
                                         Correos
                                     </a>
                                 </li>
-
                                 <li>
                                     <a href="{{ route('customers-index')  }}">
                                         Clientes
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('sites-index')  }}">
+                                        Sitios
+                                    </a>
+                                </li>
+
                             @endauth()
 
                         </ul>

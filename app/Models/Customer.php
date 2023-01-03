@@ -94,10 +94,20 @@ class Customer extends Model
     public function validateCustomerActiveOnSites( $id )
     {
 
-        /*$ativeOnSites = DB::table('sites')
+        $result = false;
+
+        $ativeOnSites = DB::table('sites')
             ->whereRaw('idCustomer = "' . $id . '"')
             ->whereRaw('siteStatus = 1')
-            ->first();*/
+            ->first();
+
+        if ( $ativeOnSites ) {
+
+            $result = true;
+
+        }
+
+        return $result;
 
     }
 

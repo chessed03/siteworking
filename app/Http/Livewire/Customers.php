@@ -151,8 +151,20 @@ class Customers extends Component
 
             $validateCustomerActiveOnSites = Customer::validateCustomerActiveOnSites( $id );
 
-            $record = Customer::where('id', $id);
-            $record->delete();
+            if( $validateCustomerActiveOnSites ) {
+
+                $this->messageAlert('Error!', 'El cliente está activo en sitios.','error');
+
+            } else {
+
+                $record                 = Customer::where('idCustomer', $id)->first();
+                $record->customerStatus = 0;
+                $record->update();
+
+                $this->messageAlert('Éxito!', 'Cliente eliminado.','success');
+
+            }
+
         }
     }
 }
