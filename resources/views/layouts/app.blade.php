@@ -264,9 +264,7 @@
                             <span class="menu-arrow"></span>
                         </a>
                         <ul class="nav-second-level" aria-expanded="false">
-                            {{--<li>
-                                <a href="index.html">Dashboard 1</a>
-                            </li>--}}
+
                             <li>
                                 <a href="{{ route('home') }}">Home</a>
                             </li>
