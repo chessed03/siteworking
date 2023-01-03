@@ -13,7 +13,7 @@ class Emails extends Component
 	protected $paginationTheme = 'bootstrap';
     protected $listeners       = ['destroy'];
     public $paginateNumber     = 5;
-    public $orderBy            = 1;
+    public $orderBy            = 3;
     public $updateMode         = false;
     public $selected_id, $keyWord, $emailUser, $emailAddress;
 
@@ -55,6 +55,8 @@ class Emails extends Component
     {
         $this->resetInput();
         $this->updateMode = false;
+        $this->emit('closeCreateModal');
+        $this->emit('closeUpdateModal');
         $this->hydrate();
     }
 

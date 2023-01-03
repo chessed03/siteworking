@@ -2,9 +2,10 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSites extends Migration
+class CreateCustomers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +14,11 @@ class CreateSites extends Migration
      */
     public function up()
     {
-        Schema::create('sites', function (Blueprint $table) {
-            $table->bigIncrements('idSite');
-            $table->string('siteName');
-            $table->string('siteUrl');
-            $table->smallInteger('siteHealth')->default(0); // 0 unverified 1 success 2 error
-            $table->smallInteger('siteStatus')->default(1);
-            $table->string('siteCreatedBy');
+        Schema::create('customers', function (Blueprint $table) {
+            $table->bigIncrements('idCustomer');
+            $table->string('customerName');
+            $table->smallInteger('customerStatus')->default(1);
+            $table->string('customerCreatedBy');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
@@ -32,6 +31,6 @@ class CreateSites extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sites');
+        Schema::dropIfExists('customers');
     }
 }

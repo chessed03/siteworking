@@ -14,20 +14,22 @@ class Sites extends Component
     protected $paginationTheme = 'bootstrap';
     protected $listeners       = ['destroy'];
     public $paginateNumber     = 5;
-    public $orderBy            = 1;
+    public $orderBy            = 3;
     public $updateMode         = false;
-    public $selected_id, $keyWord, $siteName, $siteUrl;
+    public $selected_id, $keyWord, $siteUrl, $idCustomer;
 
 
     public function render()
     {
-        $siteStatus = new ResolveStatus;
+        $siteStatus     = new ResolveStatus;
 
         $keyWord        = '%'.$this->keyWord .'%';
 
         $paginateNumber = $this->paginateNumber;
 
         $orderBy        = intval($this->orderBy);
+
+        $customers      = Site::getCustomersActives();
 
         $sites          = Site::getDataForSitesView( $keyWord, $paginateNumber, $orderBy );
 
@@ -39,6 +41,7 @@ class Sites extends Component
 
         return view('livewire.sites.view', [
             'sites'      => $sites,
+            'customers'  => $customers,
             'siteStatus' => $siteStatus
         ]);
     }
@@ -54,34 +57,37 @@ class Sites extends Component
     {
         $this->resetErrorBag();
         $this->resetValidation();
+        $this->emit('select2');
     }
 
     public function cancel()
     {
         $this->resetInput();
         $this->updateMode = false;
+        $this->emit('closeCreateModal');
+        $this->emit('closeUpdateModal');
         $this->hydrate();
     }
 
     private function resetInput()
     {
-		$this->siteName = null;
+		$this->idCustomer = null;
 		$this->siteUrl  = null;
     }
 
     public function store()
     {
         $this->validate([
-		    'siteName' => 'required',
+		    'idCustomer' => 'required',
 		    'siteUrl'  => 'required',
         ]);
 
-        $validateNewSiteNoRepeat = Site::validateNewSiteNoRepeat( null, $this->siteName );
+        $validateNewSiteNoRepeat = Site::validateNewSiteNoRepeat( null, $this->siteUrl );
 
         if ( $validateNewSiteNoRepeat ) {
 
             Site::create([
-                'siteName'      => $this->siteName,
+                'idCustomer'    => intval($this->idCustomer),
                 'siteUrl'       => $this->siteUrl,
                 'siteCreatedBy' => 'user-root'
             ]);
@@ -90,7 +96,7 @@ class Sites extends Component
 
         } else {
 
-            $this->messageAlert('Error!', 'Ya existe un sitio con el nombre ingresado.','error');
+            $this->messageAlert('Error!', 'Ya existe un sitio con el URL ingresado.','error');
 
         }
 
@@ -106,30 +112,30 @@ class Sites extends Component
 
         $this->selected_id = $id;
 
-		$this->siteName    = $record->siteName;
+		$this->idCustomer  = $record->idCustomer;
 
 		$this->siteUrl     = $record->siteUrl;
 
-        $this->updateMode = true;
+        $this->updateMode  = true;
     }
 
     public function update()
     {
         $this->validate([
-            'siteName' => 'required',
-            'siteUrl'  => 'required',
+            'idCustomer' => 'required',
+            'siteUrl'    => 'required',
         ]);
 
         if ($this->selected_id) {
 
-            $validateNewSiteNoRepeat = Site::validateNewSiteNoRepeat( $this->selected_id, $this->siteName );
+            $validateNewSiteNoRepeat = Site::validateNewSiteNoRepeat( $this->selected_id, $this->siteUrl );
 
             if ( $validateNewSiteNoRepeat ) {
 
                 $record = Site::find($this->selected_id);
 
                 $record->update([
-                    'siteName'   => $this->siteName,
+                    'idCustomer'   => $this->idCustomer,
                     'siteUrl'    => $this->siteUrl,
                     'siteHealth' => 0
                 ]);
@@ -184,6 +190,6 @@ class Sites extends Component
         $this->updateMode = false;
 
         $this->messageAlert('Éxito!', 'Proceso terminado.','success');
-
     }
+
 }

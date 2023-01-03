@@ -13,6 +13,7 @@
     <link href="{{ asset("template/boxicons/css/boxicons.min.css" )}}" rel="stylesheet">
 
     <!-- Plugins css -->
+
     <link href="{{ asset('template/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('template/libs/jquery-toast/jquery.toast.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('template/libs/jquery-nice-select/nice-select.css') }}" rel="stylesheet" type="text/css" />
@@ -282,6 +283,12 @@
                                         Correos
                                     </a>
                                 </li>
+
+                                <li>
+                                    <a href="{{ route('customers-index')  }}">
+                                        Clientes
+                                    </a>
+                                </li>
                             @endauth()
 
                         </ul>
@@ -456,11 +463,15 @@
 <script type="text/javascript">
 
     window.livewire.on('closeCreateModal', () => {
+
         $('#createModal').modal('hide');
+
     });
 
     window.livewire.on('closeUpdateModal', () => {
+
         $('#updateModal').modal('hide');
+
     });
 
     window.livewire.on('message', (heading, text, icon) => {

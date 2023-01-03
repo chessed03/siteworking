@@ -49,4 +49,11 @@ use Illuminate\Support\Facades\Route;
 
         });
 
+        # Customers routes
+        Route::group(['prefix' => 'customers'], function () {
+
+            Route::get('index', [App\Http\Controllers\CustomerController::class, 'index'])->name('customers-index');
+
+        });
+
     });

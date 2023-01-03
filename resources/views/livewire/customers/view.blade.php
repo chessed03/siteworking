@@ -1,4 +1,4 @@
-@section('title', __('Sites'))
+@section('title', __('Customers'))
 
 <div class="container-fluid">
 
@@ -9,10 +9,10 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Scraper</a></li>
-                        <li class="breadcrumb-item active">Sitios</li>
+                        <li class="breadcrumb-item active">Clientes</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Sitios</h4>
+                <h4 class="page-title">Clientes</h4>
             </div>
         </div>
     </div>
@@ -25,13 +25,13 @@
             <div class="card-box">
 
                 <div class="row justify-content-between">
-                    <h4 class="header-title mb-3">Lista de sitios</h4>
+                    <h4 class="header-title mb-3">Lista de clientes</h4>
 
-                    <button type="button" class="btn btn-success btn-rounded waves-effect" data-toggle="modal" data-target="#createModal"><i class="bx bx-fw bxs-plus-circle bx-xs"></i> Agregar sitio </button>
+                    <button type="button" class="btn btn-success btn-rounded waves-effect" data-toggle="modal" data-target="#createModal"><i class="bx bx-fw bxs-plus-circle bx-xs"></i> Agregar cliente </button>
                 </div>
 
-                @include('livewire.sites.create')
-                @include('livewire.sites.update')
+                @include('livewire.customers.create')
+                @include('livewire.customers.update')
 
                 <div class="row pt-3">
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -75,65 +75,37 @@
                     <table class="table table-borderless table-hover table-centered m-0">
 
                         <thead class="bg-soft-secondary">
-                            <tr>
-                                <th>#</th>
-                                <th>Cliente</th>
-                                <th>Url</th>
-                                <th>Estado</th>
-                                <th class="text-center">Acciones</th>
-                            </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
                         </thead>
                         <tbody>
 
-                        @foreach($sites as $row)
+                        @foreach($customers as $row)
                             <tr>
                                 <td style="width: 5%;">
-                                    {{ ($sites ->currentpage()-1) * $sites ->perpage() + $loop->index + 1 }}
+                                    {{ $row->idCustomer }}
                                 </td>
 
                                 <td style="width: 25%;">
-
                                     <h5 class="m-0 font-weight-normal">{{ $row->customerName }}</h5>
-
-                                </td>
-
-                                <td style="width: 30%;">
-                                    <h5 class="m-0 font-weight-normal">{{ $row->siteUrl }}</h5>
-                                </td>
-
-                                <td wire:key="{{ $row->idSite }}" style="width: 20%;">
-
-                                    <span class="badge badge-light-{{ $siteStatus->siteHealth( $row->siteHealth )->type }} badge-pill font-14" wire:loading.remove wire:target="scrapingSingleVerification({{ $row->idSite  }})">
-                                        <i class="{{ $siteStatus->siteHealth( $row->siteHealth )->icon }} text-{{ $siteStatus->siteHealth( $row->siteHealth )->type }}"></i>
-                                        {{ $siteStatus->siteHealth( $row->siteHealth )->text }}
-                                    </span>
-
-                                    <div wire:loading wire:target="scrapingSingleVerification({{ $row->idSite  }})">
-                                        <span class="badge badge-light-secondary badge-pill font-14"><i class='bx bx-fw bx-radio-circle bx-burst'></i> Procesando...</span>
-                                    </div>
-
                                 </td>
 
                                 <td class="text-center" style="width: 20%;">
 
-
                                     <div class="btn-group dropdown mb-2">
-                                        <button wire:target="scrapingSingleVerification" wire:loading.attr="disabled" type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-rounded waves-effect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split btn-rounded waves-effect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="bx bx-fw bxs-chevron-down"></i> Opciones
                                         </button>
                                         <div class="dropdown-menu">
 
-                                            <a class="dropdown-item text-success"
-                                               href="#"
-                                               wire:click="scrapingSingleVerification({{ $row->idSite  }})">
-                                                <i class="bx bx-fw bxs-cog"></i> Procesar URL
-                                            </a>
-
-                                            <a class="dropdown-item text-primary" href="#" data-toggle="modal" data-target="#updateModal" wire:click="edit({{ $row->idSite }})">
+                                            <a class="dropdown-item text-primary" href="#" data-toggle="modal" data-target="#updateModal" wire:click="edit({{ $row->idCustomer }})">
                                                 <i class="bx bx-fw bxs-pencil"></i> Editar
                                             </a>
 
-                                            <a class="dropdown-item text-danger" href="#" onclick="destroy('{{ $row->idSite }}')">
+                                            <a class="dropdown-item text-danger" href="#" onclick="destroy('{{ $row->idCustomer }}')">
                                                 <i class="bx bx-fw bxs-trash-alt"></i> Eliminar
                                             </a>
 
@@ -150,7 +122,7 @@
                 <nav>
                     <ul class="pagination justify-content-center pagination pagination-rounded">
 
-                        {{ $sites->links() }}
+                        {{ $customers->links() }}
 
                     </ul>
                 </nav>
@@ -201,41 +173,6 @@
 
         }
 
-        window.initSelectCustomerSelect=()=>{
-
-            $('.select2').select2({
-                placeholder: 'Selecciona una opción',
-                width: '100%'
-            });
-
-        }
-
-        initSelectCustomerSelect();
-
-        $('.select2').on('change', function (e) {
-
-            let item = $(this).attr('id');
-
-            let model = $(this).attr('data-model');
-
-            let data = $('#' + item).select2('val');
-
-            @this.set(model, data);
-
-        });
-
-        window.livewire.on('select2',()=>{
-
-            initSelectCustomerSelect();
-
-        });
-
     </script>
-
-@endpush
-
-@push('scripts')
-
-
 
 @endpush

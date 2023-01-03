@@ -14,37 +14,39 @@ class Site extends Model
 
     protected $primaryKey = 'idSite';
 
-    protected $fillable   = ['siteName','siteUrl','siteHealth','siteStatus','siteCreatedBy'];
+    protected $fillable   = ['idCustomer','siteUrl','siteHealth','siteStatus','siteCreatedBy'];
 
     public function getDataForSitesView( $keyWord, $paginateNumber, $orderBy )
     {
         $query = DB::table('sites');
 
-        $query->whereRaw('siteName LIKE "' . $keyWord . '"');
+        $query->leftJoin('customers', 'sites.idCustomer', '=', 'customers.idCustomer');
+
+        $query->whereRaw('customerName LIKE "' . $keyWord . '"');
 
         $query->whereRaw('siteStatus = 1');
 
         if ( $orderBy == 1 ) {
 
-            $query->orderByRaw('siteName ASC');
+            $query->orderByRaw('customerName ASC');
 
         }
 
         if ( $orderBy == 2 ) {
 
-            $query->orderByRaw('siteName DESC');
+            $query->orderByRaw('customerName DESC');
 
         }
 
         if ( $orderBy == 3 ) {
 
-            $query->orderByRaw('created_at DESC');
+            $query->orderByRaw('sites.created_at DESC');
 
         }
 
         if ( $orderBy == 4 ) {
 
-            $query->orderByRaw('created_at ASC');
+            $query->orderByRaw('sites.created_at ASC');
 
         }
 
@@ -53,7 +55,7 @@ class Site extends Model
         return $result;
     }
 
-    public function validateNewSiteNoRepeat( $idSite, $siteName)
+    public function validateNewSiteNoRepeat( $idSite, $siteUrl)
     {
 
         $query = DB::table('sites');
@@ -64,7 +66,7 @@ class Site extends Model
 
         }
 
-        $query->whereRaw('siteName =  "'. $siteName . '"');
+        $query->whereRaw('siteUrl =  "'. $siteUrl . '"');
 
         $query->whereRaw('siteStatus = 1');
 
@@ -161,6 +163,13 @@ class Site extends Model
 
         }
 
+    }
+
+    public function getCustomersActives()
+    {
+        $query = Customer::getCustomersActives();
+
+        return $query;
     }
 
 }

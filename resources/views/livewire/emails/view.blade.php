@@ -56,7 +56,7 @@
                                 <button class="btn btn-secondary waves-effect waves-light" type="button"><i class="bx bx-fw bx-list-ol bx-xs"></i> Ordenar</button>
                             </div>
                             <select wire:model='orderBy' name="orderBy" id="orderBy" class="form-control">
-                                <option value="1" selected>De A a la Z</option>
+                                <option value="1">De A a la Z</option>
                                 <option value="2">De Z a la A</option>
                                 <option value="3">Más recientes primero</option>
                                 <option value="4">Más antiguos primero</option>
